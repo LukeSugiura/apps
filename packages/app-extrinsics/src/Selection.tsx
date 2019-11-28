@@ -32,6 +32,7 @@ function AddressField (): React.ReactElement {
       error={meta.touched && typeof meta.error === 'undefined'}
       fluid
       label={t('using the selected account')}
+      labelExtra={<BalanceFree label={<label>{t('free balance')}</label>} params={field.value} />}
       options={[{key: 'a', text: 'a', value: 'a'}, {key: 'b', text: 'b', value: 'b'}]}
       search
       selection

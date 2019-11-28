@@ -3,15 +3,9 @@ import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import SUIDropdown from 'semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown';
 import styled from 'styled-components'
 import { Labelled } from '@polkadot/react-components';
+import { classes } from '@polkadot/react-components/util';
 
 type Props = React.ComponentProps<typeof SUIDropdown> & Pick<React.ComponentProps<typeof Labelled>, 'className' | 'help' | 'label' | 'labelExtra' | 'style' | 'withEllipsis' | 'withLabel'>
-
-// [TODO] use util on @polkadot/react-compoenntns
-function classes (...classNames: (boolean | null | string | undefined)[]): string {
-  return classNames
-    .filter((className): boolean => !!className)
-    .join(' ');
-}
 
 function Dropdown ({
   className,
