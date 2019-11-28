@@ -10,8 +10,15 @@ import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 
 import React, { useMemo } from 'react';
 import { Button, Extrinsic, InputAddress, TxButton, TxComponent } from '@polkadot/react-components';
+import createHeader from '@polkadot/react-components/InputAddress/createHeader';
+import createItem from '@polkadot/react-components/InputAddress/createItem';
+import { Option } from '@polkadot/react-components/InputAddress/types';
 import { withApi, withMulti } from '@polkadot/react-api';
+import { useObservable } from '@polkadot/react-hooks';
 import { BalanceFree } from '@polkadot/react-query';
+import keyring from '@polkadot/ui-keyring';
+import keyringOption from '@polkadot/ui-keyring/options';
+import { KeyringOptions, KeyringSectionOption, KeyringSectionOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
 import { Formik, useField } from 'formik';
 import styled from 'styled-components'
 
@@ -21,14 +28,29 @@ import { useTranslation } from './translate';
 function AddressField (): React.ReactElement {
   const { t } = useTranslation()
   const [field, meta] = useField('accountId')
+  const { optionsAll } = useObservable(keyringOption.optionsSubject, {
+    propName: 'optionsAll',
+    transform: (optionsAll: KeyringOptions): Record<string, Option[]> =>
+      Object.entries(optionsAll).reduce((result: Record<string, Option[]>, [type, options]): Record<string, Option[]> => {
+        result[type] = options.map((option): Option =>
+          option.value === null
+            ? createHeader(option)
+            : createItem(option)
+        );
 
-  const handleChange = (_: any, { value }: { value: any}) => {
+        return result;
+      }, {})
+  })
+
+  console.log(optionsAll);
+
+  const handleChange = (_: any, { value }: { value: any }) => {
     field.onChange('accountId')(value)
   }
 
   return (
     <Dropdown
-      className={'ui--InputAddress'}
+      className='ui--InputAddress'
       error={meta.touched && typeof meta.error === 'undefined'}
       fluid
       label={t('using the selected account')}

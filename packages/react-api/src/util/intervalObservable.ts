@@ -21,3 +21,18 @@ export default function intervalObservable<T, Props, State extends CallState> (t
     }
   });
 }
+
+export function intervalObservableWithoutComponent(
+  callUpdated: CallState['callUpdated'],
+  setCallUpdated: (callUpdated: CallState['callUpdated']) => void,
+  callUpdatedAt: number = 0
+): Subscription {
+  return interval$.subscribe((): void => {
+    const elapsed = Date.now() - (callUpdatedAt || 0);
+    const newCallUpdated = elapsed <= 1500;
+
+    if (newCallUpdated !== callUpdated) {
+      setCallUpdated(newCallUpdated)
+    }
+  });
+}
