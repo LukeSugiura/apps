@@ -1,40 +1,94 @@
-import React from 'react'
+import React from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
-import SUIDropdown from 'semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown';
-import styled from 'styled-components'
+import SUIDropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown';
+import styled from 'styled-components';
 import { Labelled } from '@polkadot/react-components';
 import { classes } from '@polkadot/react-components/util';
 
-type Props = React.ComponentProps<typeof SUIDropdown> & Pick<React.ComponentProps<typeof Labelled>, 'className' | 'help' | 'label' | 'labelExtra' | 'style' | 'withEllipsis' | 'withLabel'>
+interface Props<Option> extends
+  Pick<DropdownProps, 'onBlur' | 'onClose' | 'onSearch' | 'options' | 'placeholder' | 'renderLabel' | 'searchInput' | 'selection'>,
+  Pick<React.ComponentProps<typeof Labelled>, 'className' | 'help' | 'label' | 'labelExtra' | 'style' | 'withEllipsis' | 'withLabel'> {
+  allowAdd?: boolean;
+  dropdownClassName?: string;
+  isButton?: boolean;
+  isDisabled?: boolean;
+  isError?: boolean;
+  isMultiple?: boolean;
+  onAdd?: (value: any) => void;
+  onChange?: (value: any) => void;
+  options: Option[];
+  transform?: (value: any) => any;
+  value: any;
+}
 
-function Dropdown ({
-  className,
-  help,
-  label,
-  labelExtra,
-  style,
-  withEllipsis,
-  withLabel,
-  ...dropdownProps
-}: Props): React.ReactElement {
-  return dropdownProps.button ? (
+function Dropdown<Option> ({
+  allowAdd,
+  dropdownClassName,
+  isButton,
+  isDisabled,
+  isError,
+  isMultiple,
+  onAdd,
+  onBlur,
+  onChange,
+  onClose,
+  options,
+  placeholder,
+  renderLabel,
+  onSearch,
+  searchInput,
+  selection,
+  transform,
+  value,
+  ...labelledProps
+}: Props<Option>): React.ReactElement<Props<Option>> {
+  const _onAdd: DropdownProps['onAddItem'] = (_, { value }) => {
+    onAdd && onAdd(value);
+  };
+
+  const _onChange: DropdownProps['onChange'] = (_, { value }) => {
+    onChange && onChange(
+      transform
+        ? transform(value)
+        : value
+    );
+  };
+
+  const dropdownProps: React.ComponentProps<typeof SUIDropdown> = {
+    allowAdditions: allowAdd,
+    button: isButton,
+    className: dropdownClassName,
+    compact: isButton,
+    disabled: isDisabled,
+    error: isError,
+    floating: isButton,
+    fluid: true,
+    multiple: isMultiple,
+    onAddItem: _onAdd,
+    onBlur,
+    onChange: _onChange,
+    onClose,
+    options,
+    placeholder,
+    renderLabel,
+    search: onSearch || allowAdd,
+    searchInput,
+    selection,
+    value
+  };
+
+  return isButton ? (
     <Button.Group primary>
       <SUIDropdown {...dropdownProps} />
     </Button.Group>
   ) : (
     <Labelled
-      className={classes('ui--Dropdown', className)}
-      help={help}
-      label={label}
-      labelExtra={labelExtra}
-      style={style}
-      withEllipsis={withEllipsis}
-      withLabel={withLabel}
+      {...labelledProps}
+      className={classes('ui--Dropdown', labelledProps.className)}
     >
       <SUIDropdown {...dropdownProps} />
     </Labelled>
-    );
-  ;
+  );
 }
 
 export default styled(Dropdown)`

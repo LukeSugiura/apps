@@ -2,69 +2,19 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-import { Call } from '@polkadot/types/interfaces';
-import { I18nProps } from '@polkadot/react-components/types';
-import { QueueTxExtrinsicAdd } from '@polkadot/react-components/Status/types';
-import { ApiProps } from '@polkadot/react-api/types';
-import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
+// import { Call } from '@polkadot/types/interfaces';
+// import { I18nProps } from '@polkadot/react-components/types';
+// import { QueueTxExtrinsicAdd } from '@polkadot/react-components/Status/types';
+// import { ApiProps } from '@polkadot/react-api/types';
+// import { SubmittableExtrinsic } from '@polkadot/api/promise/types';
 
 import React, { useMemo } from 'react';
-import { Button, Extrinsic, InputAddress, TxButton, TxComponent } from '@polkadot/react-components';
-import createHeader from '@polkadot/react-components/InputAddress/createHeader';
-import createItem from '@polkadot/react-components/InputAddress/createItem';
-import { Option } from '@polkadot/react-components/InputAddress/types';
-import { withApi, withMulti } from '@polkadot/react-api';
-import { useObservable } from '@polkadot/react-hooks';
-import { BalanceFree } from '@polkadot/react-query';
-import keyring from '@polkadot/ui-keyring';
-import keyringOption from '@polkadot/ui-keyring/options';
-import { KeyringOptions, KeyringSectionOption, KeyringSectionOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
-import { Formik, useField } from 'formik';
-import styled from 'styled-components'
+// import { Button, Extrinsic, InputAddress, TxButton, TxComponent } from '@polkadot/react-components';
+import { Formik } from 'formik';
 
-import Dropdown from './Dropdown';
-import { useTranslation } from './translate';
+import AddressField from './AddressField';
 
-function AddressField (): React.ReactElement {
-  const { t } = useTranslation()
-  const [field, meta] = useField('accountId')
-  const { optionsAll } = useObservable(keyringOption.optionsSubject, {
-    propName: 'optionsAll',
-    transform: (optionsAll: KeyringOptions): Record<string, Option[]> =>
-      Object.entries(optionsAll).reduce((result: Record<string, Option[]>, [type, options]): Record<string, Option[]> => {
-        result[type] = options.map((option): Option =>
-          option.value === null
-            ? createHeader(option)
-            : createItem(option)
-        );
-
-        return result;
-      }, {})
-  })
-
-  console.log(optionsAll);
-
-  const handleChange = (_: any, { value }: { value: any }) => {
-    field.onChange('accountId')(value)
-  }
-
-  return (
-    <Dropdown
-      className='ui--InputAddress'
-      error={meta.touched && typeof meta.error === 'undefined'}
-      fluid
-      label={t('using the selected account')}
-      labelExtra={<BalanceFree label={<label>{t('free balance')}</label>} params={field.value} />}
-      options={[{key: 'a', text: 'a', value: 'a'}, {key: 'b', text: 'b', value: 'b'}]}
-      search
-      selection
-      onChange={handleChange}
-      value={field.value}
-    />
-  );
-}
-
-export default function (): React.ReactElement {
+export default function Selection (): React.ReactElement {
   const initialValues = useMemo(() => ({
     accountId: ''
   }), []);
@@ -73,11 +23,11 @@ export default function (): React.ReactElement {
     <div className='extrinsics--Selection'>
       <Formik
         initialValues={initialValues}
-        onSubmit={() => {}}
+        onSubmit={(): void => {}}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit }): React.ReactElement => (
           <form onSubmit={handleSubmit}>
-            <AddressField />
+            <AddressField type='account' />
           </form>
         )}
       </Formik>
