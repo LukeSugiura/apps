@@ -12,8 +12,9 @@ import { Option } from '@polkadot/react-components/InputAddress/types';
 import addressToAddress from '@polkadot/react-components/util/toAddress';
 import { useObservable } from '@polkadot/react-hooks';
 import { BalanceFree } from '@polkadot/react-query';
+import keyring from '@polkadot/ui-keyring';
 import keyringOption from '@polkadot/ui-keyring/options';
-import { KeyringOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
+import { KeyringOptions, KeyringSectionOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
 
 import Dropdown from './Dropdown';
 import { useTranslation } from './translate';
@@ -29,6 +30,18 @@ function transformToAddress (value: string | Uint8Array): string | null {
   }
 
   return null;
+}
+
+function transformToAccountId (value: string): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const accountId = transformToAddress(value);
+
+  return !accountId
+    ? null
+    : accountId;
 }
 
 function readOptions (): Record<string, any> {
@@ -106,10 +119,45 @@ export default function ({
     return optionsAll[type];
   }, [optionsAll]);
 
-  const onSearch: DropdownProps['onSearch'] = (filteredOptions, _query) => {};
+  const onSearch = (filteredOptions: KeyringSectionOptions, _query: string): KeyringSectionOptions => {
+    const isInput = true;
+    const query = _query.trim();
+    const queryLower = query.toLowerCase();
+    const matches = filteredOptions.filter((item): boolean =>
+      item.value !== null && (
+        (item.name.toLowerCase && item.name.toLowerCase().includes(queryLower)) ||
+        item.value.toLowerCase().includes(queryLower)
+      )
+    );
+
+    const valueMatches = matches.filter((item): boolean =>
+      item.value !== null
+    );
+
+    if (isInput && valueMatches.length === 0) {
+      const accountId = transformToAccountId(query);
+
+      if (accountId) {
+        matches.push(
+          keyring.saveRecent(
+            accountId.toString()
+          ).option
+        );
+      }
+    }
+
+    return matches.filter((item, index): boolean => {
+      const isLast = index === matches.length - 1;
+      const nextItem = matches[index + 1];
+      const hasNext = nextItem && nextItem.value;
+
+      return item.value !== null || (!isLast && !!hasNext);
+    });
+  };
 
   return (
     <Dropdown
+      {...dropdownProps}
       className='ui--InputAddress'
       isError={meta.touched && typeof meta.error === 'undefined'}
       label={t('using the selected account')}
