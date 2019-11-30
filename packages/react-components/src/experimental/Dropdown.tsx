@@ -1,12 +1,18 @@
+// Copyright 2017-2019 @polkadot/react-components authors & contributors
+// This software may be modified and distributed under the terms
+// of the Apache-2.0 license. See the LICENSE file for details.
+
 import React from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import SUIDropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown';
 import styled from 'styled-components';
-import { Labelled } from '@polkadot/react-components';
-import { classes } from '@polkadot/react-components/util';
+
+
+import { Labelled } from '..';
+import { classes } from '../util';
 
 interface Props<Option> extends
-  Pick<DropdownProps, 'onBlur' | 'onClose' | 'onSearch' | 'options' | 'placeholder' | 'renderLabel' | 'searchInput' | 'selection'>,
+  Pick<DropdownProps, 'onBlur' | 'onClose' | 'options' | 'placeholder' | 'renderLabel' | 'searchInput' | 'selection'>,
   Pick<React.ComponentProps<typeof Labelled>, 'className' | 'help' | 'label' | 'labelExtra' | 'style' | 'withEllipsis' | 'withLabel'> {
   allowAdd?: boolean;
   dropdownClassName?: string;
@@ -16,6 +22,7 @@ interface Props<Option> extends
   isMultiple?: boolean;
   onAdd?: (value: any) => void;
   onChange?: (value: any) => void;
+  onSearch?: (filteredOptions: any[], query: string) => Option[];
   options: Option[];
   transform?: (value: any) => any;
   value: any;

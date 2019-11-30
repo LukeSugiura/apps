@@ -12,11 +12,16 @@ import React, { useMemo } from 'react';
 // import { Button, Extrinsic, InputAddress, TxButton, TxComponent } from '@polkadot/react-components';
 import { Formik } from 'formik';
 
-import AddressField from './AddressField';
+import { FieldAddress, Extrinsic } from '@polkadot/react-components/experimental';
+import { BalanceFree } from '@polkadot/react-query';
+
+import { useTranslation } from './translate';
 
 export default function Selection (): React.ReactElement {
+  const { t } = useTranslation();
   const initialValues = useMemo(() => ({
-    accountId: ''
+    accountId: '',
+    extrinsic: {}
   }), []);
 
   return (
@@ -25,9 +30,20 @@ export default function Selection (): React.ReactElement {
         initialValues={initialValues}
         onSubmit={(): void => {}}
       >
-        {({ handleSubmit }): React.ReactElement => (
+        {({ handleSubmit, values }): React.ReactElement => (
           <form onSubmit={handleSubmit}>
-            <AddressField type='account' />
+            <FieldAddress
+              name='accountId'
+              label={t('using the selected account')}
+              labelExtra={<BalanceFree label={<label>{t('free balance')}</label>} params={values.accountId} />}
+              type='account'
+            />
+            <Extrinsic
+              // defaultValue={apiDefaultTxSudo}
+              label={t('submit the following extrinsic')}
+              // onChange={this.onChangeExtrinsic}
+              // onEnter={this.sendTx}
+            />
           </form>
         )}
       </Formik>

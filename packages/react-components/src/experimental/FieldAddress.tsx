@@ -1,4 +1,4 @@
-// Copyright 2017-2019 @polkadot/app-extrinsics authors & contributors
+// Copyright 2017-2019 @polkadot/react-components authors & contributors
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
@@ -7,19 +7,18 @@ import React, { useEffect, useMemo } from 'react';
 import store from 'store';
 import styled from 'styled-components';
 
-import { classes } from '@polkadot/react-components/util';
-import createHeader from '@polkadot/react-components/InputAddress/createHeader';
-import createItem from '@polkadot/react-components/InputAddress/createItem';
-import { Option } from '@polkadot/react-components/InputAddress/types';
-import addressToAddress from '@polkadot/react-components/util/toAddress';
 import { useObservable } from '@polkadot/react-hooks';
-import { BalanceFree } from '@polkadot/react-query';
 import keyring from '@polkadot/ui-keyring';
 import keyringOption from '@polkadot/ui-keyring/options';
 import { KeyringOptions, KeyringSectionOptions, KeyringOption$Type } from '@polkadot/ui-keyring/options/types';
 
+import { classes } from '../util';
+import createHeader from '../InputAddress/createHeader';
+import createItem from '../InputAddress/createItem';
+import { Option } from '../InputAddress/types';
+import addressToAddress from '../util/toAddress';
 import Dropdown from './Dropdown';
-import { useTranslation } from './translate';
+import { FieldProps } from './type';
 
 const STORAGE_KEY = 'options:InputAddress';
 const DEFAULT_TYPE = 'all';
@@ -67,20 +66,20 @@ function setLastValue (type: KeyringOption$Type = DEFAULT_TYPE, value: string): 
 
 type DropdownProps = React.ComponentProps<typeof Dropdown>
 
-interface Props extends Omit<DropdownProps, 'onSearch' | 'options' | 'value'> {
+interface Props extends FieldProps, Omit<DropdownProps, 'onSearch' | 'options' | 'value'> {
   hideAddress?: boolean;
   isInput?: boolean;
   type?: KeyringOption$Type;
 }
 
-function AddressField ({
+function FieldAddress ({
   isInput = true,
   hideAddress = false,
+  name,
   type = DEFAULT_TYPE,
   ...dropdownProps
 }: Props): React.ReactElement<Props> | null {
-  const { t } = useTranslation();
-  const [field, meta] = useField('accountId');
+  const [field, meta] = useField(name);
   const { optionsAll } = useObservable<Record<string, Option[]>>(keyringOption.optionsSubject, {
     propName: 'optionsAll',
     transform: (optionsAll: KeyringOptions): Record<string, Option[]> =>
@@ -165,8 +164,6 @@ function AddressField ({
       {...dropdownProps}
       className={classes('ui--InputAddress', hideAddress && 'hideAddress', dropdownProps.className)}
       isError={meta.touched && typeof meta.error === 'undefined'}
-      label={t('using the selected account')}
-      labelExtra={<BalanceFree label={<label>{t('free balance')}</label>} params={field.value} />}
       options={options}
       onSearch={onSearch}
       selection
@@ -176,7 +173,7 @@ function AddressField ({
   );
 }
 
-export default styled(AddressField)`
+export default styled(FieldAddress)`
   .ui.dropdown .text {
     width: 100%;
   }
