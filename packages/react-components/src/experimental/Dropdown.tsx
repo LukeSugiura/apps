@@ -7,7 +7,6 @@ import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import SUIDropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown';
 import styled from 'styled-components';
 
-
 import { Labelled } from '..';
 import { classes } from '../util';
 

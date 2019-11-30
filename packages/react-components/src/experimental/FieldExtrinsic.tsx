@@ -3,12 +3,12 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { useField } from 'formik';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useApi } from '@polkadot/react-hooks';
 
 import { Labelled } from '..';
-import methodOptions from '../InputExtrinsic/options/method';
+import createOptionsSection from '../InputExtrinsic/options/section';
 import { BareProps } from '../types';
 import SelectSection from './SelectSection';
 import { FieldProps } from './type';
@@ -22,12 +22,14 @@ export default function FieldExtrinsic ({
   label,
   name,
   withLabel,
-  style,
+  style
 }: Props): React.ReactElement<Props> {
   const { api } = useApi();
-  const [field, meta] = useField(name);
-  console.log(api, field.value)
-  console.log(methodOptions(api, field.value))
+  const sectionName = `${name}.section`;
+  const [sectionField, sectionMeta] = useField(sectionName);
+  const optionsSection = useMemo(() => createOptionsSection(api), [api]);
+
+  const onChangeSection = sectionField.onChange(sectionName);
 
   return (
     <div
@@ -40,13 +42,13 @@ export default function FieldExtrinsic ({
         withLabel={withLabel}
       >
         <div className='ui--DropdownLinked ui--row'>
-          {/* <SelectSection
+          <SelectSection
             className='small'
-            isError={!!(meta.touched && meta.error)}
-            // onChange={_onSectionChange}
-            // options={optionsSection}
-            value={field.value}
-          /> */}
+            isError={!!(sectionMeta.touched && sectionMeta.error)}
+            onChange={onChangeSection}
+            options={optionsSection}
+            value={sectionField.value}
+          />
           {/* <SelectMethod
             api={api}
             className='large'

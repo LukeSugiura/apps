@@ -7,14 +7,13 @@ import React from 'react';
 import { classes } from '../util';
 import Dropdown from './Dropdown';
 
-type Props = Pick<React.ComponentProps<typeof Dropdown>, 'className' | 'isError' | 'onChange' | 'options' | 'style' | 'value'>
+type Props = Pick<React.ComponentProps<typeof Dropdown>, 'className' | 'isError' | 'onChange' | 'options' | 'value'>
 
 export default function SelectSection (props: Props): React.ReactElement<Props> {
   return (
     <Dropdown
       {...props}
       className={classes('ui--DropdownLinked-Sections', props.className)}
-      value={props.value.section}
       withLabel={false}
     />
   );

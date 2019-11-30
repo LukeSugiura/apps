@@ -6,9 +6,7 @@ import React from 'react';
 
 import FieldExtrinsic from './FieldExtrinsic';
 
-interface Props extends Pick<React.ComponentProps<typeof FieldExtrinsic>, 'label' | 'withLabel'> {
-
-}
+type Props = Pick<React.ComponentProps<typeof FieldExtrinsic>, 'label' | 'withLabel'>
 
 export default function Extrinsic ({
   label,
@@ -23,7 +21,6 @@ export default function Extrinsic ({
         // isPrivate={isPrivate}
         label={label}
         name='extrinsic'
-        // onChange={_onChangeMethod}
         withLabel={withLabel}
         // help={meta && meta.documentation && meta.documentation.join(' ')}
       />

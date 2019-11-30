@@ -21,7 +21,10 @@ export default function Selection (): React.ReactElement {
   const { t } = useTranslation();
   const initialValues = useMemo(() => ({
     accountId: '',
-    extrinsic: {}
+    extrinsic: {
+      section: '',
+      method: ''
+    }
   }), []);
 
   return (
