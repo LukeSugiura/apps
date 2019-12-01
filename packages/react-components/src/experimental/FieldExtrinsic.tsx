@@ -48,13 +48,17 @@ export default function FieldExtrinsic ({
     [meta]
   );
 
-  useEffect(() => {
+  useEffect((): void => {
     onChangeSection(section);
-  }, [section]);
-
-  useEffect(() => {
     onChangeMethod(method);
-  }, [method]);
+  }, [section, method]);
+
+  useEffect((): void => {
+    if (!optionsMethod.length) {
+      return;
+    }
+    onChangeMethod(optionsMethod[0].value);
+  }, [optionsMethod]);
 
   return (
     <div
