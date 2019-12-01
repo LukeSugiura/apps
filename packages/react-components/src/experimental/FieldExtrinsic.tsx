@@ -22,13 +22,13 @@ interface Props extends BareProps, FieldProps, Pick<React.ComponentProps<typeof 
 
 export default function FieldExtrinsic ({
   className,
-  help,
+  help: helpProp,
   label,
   name,
   withLabel,
   style
 }: Props): React.ReactElement<Props> {
-  const { api } = useApi();
+  const { api, apiDefaultTxSudo: { meta } } = useApi();
   const sectionName = `${name}.section`;
   const [sectionField, sectionMeta] = useField(sectionName);
   const optionsSection = useMemo(() => createOptionsSection(api), [api]);
@@ -42,13 +42,18 @@ export default function FieldExtrinsic ({
   );
   const onChangeMethod = sectionField.onChange(methodName);
 
+  const help = useMemo(
+    () => meta && meta.documentation && meta.documentation.join(' '),
+    [meta]
+  );
+
   return (
     <div
       className={className}
       style={style}
     >
       <Labelled
-        help={help}
+        help={helpProp || help}
         label={label}
         withLabel={withLabel}
       >
