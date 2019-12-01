@@ -5,6 +5,8 @@
 import { useField } from 'formik';
 import React, { useMemo } from 'react';
 
+import '../InputExtrinsic/InputExtrinsic.css';
+
 import { useApi } from '@polkadot/react-hooks';
 
 import { Labelled } from '..';

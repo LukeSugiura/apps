@@ -166,7 +166,6 @@ function FieldAddress ({
       isError={meta.touched && typeof meta.error === 'undefined'}
       options={options}
       onSearch={onSearch}
-      selection
       onChange={onChange}
       value={field.value}
     />

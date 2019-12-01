@@ -11,7 +11,7 @@ import { Labelled } from '..';
 import { classes } from '../util';
 
 interface Props<Option> extends
-  Pick<DropdownProps, 'onBlur' | 'onClose' | 'options' | 'placeholder' | 'renderLabel' | 'searchInput' | 'selection'>,
+  Pick<DropdownProps, 'onBlur' | 'onClose' | 'options' | 'placeholder' | 'renderLabel' | 'searchInput'>,
   Pick<React.ComponentProps<typeof Labelled>, 'className' | 'help' | 'label' | 'labelExtra' | 'style' | 'withEllipsis' | 'withLabel'> {
   allowAdd?: boolean;
   dropdownClassName?: string;
@@ -28,7 +28,7 @@ interface Props<Option> extends
 }
 
 function Dropdown<Option> ({
-  allowAdd,
+  allowAdd = false,
   dropdownClassName,
   isButton,
   isDisabled,
@@ -43,7 +43,6 @@ function Dropdown<Option> ({
   renderLabel,
   onSearch,
   searchInput,
-  selection,
   transform,
   value,
   ...labelledProps
@@ -68,7 +67,6 @@ function Dropdown<Option> ({
     disabled: isDisabled,
     error: isError,
     floating: isButton,
-    fluid: true,
     multiple: isMultiple,
     onAddItem: _onAdd,
     onBlur,
@@ -79,7 +77,7 @@ function Dropdown<Option> ({
     renderLabel,
     search: onSearch || allowAdd,
     searchInput,
-    selection,
+    selection: true,
     value
   };
 
