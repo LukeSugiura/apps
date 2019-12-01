@@ -9,7 +9,9 @@ import { useApi } from '@polkadot/react-hooks';
 
 import { Labelled } from '..';
 import createOptionsSection from '../InputExtrinsic/options/section';
+import createOptionsMethod from '../InputExtrinsic/options/method';
 import { BareProps } from '../types';
+import SelectMethod from './SelectMethod';
 import SelectSection from './SelectSection';
 import { FieldProps } from './type';
 
@@ -28,8 +30,15 @@ export default function FieldExtrinsic ({
   const sectionName = `${name}.section`;
   const [sectionField, sectionMeta] = useField(sectionName);
   const optionsSection = useMemo(() => createOptionsSection(api), [api]);
-
   const onChangeSection = sectionField.onChange(sectionName);
+
+  const methodName = `${name}.method`;
+  const [methodField, methodMeta] = useField(methodName);
+  const optionsMethod = useMemo(
+    () => createOptionsMethod(api, sectionField.value),
+    [api, sectionField.value]
+  );
+  const onChangeMethod = sectionField.onChange(methodName);
 
   return (
     <div
@@ -49,13 +58,13 @@ export default function FieldExtrinsic ({
             options={optionsSection}
             value={sectionField.value}
           />
-          {/* <SelectMethod
-            api={api}
+          <SelectMethod
             className='large'
-            onChange={_onKeyChange}
+            isError={!!(methodMeta.touched && methodMeta.error)}
+            onChange={onChangeMethod}
             options={optionsMethod}
-            value={value}
-          /> */}
+            value={methodField.value}
+          />
         </div>
       </Labelled>
     </div>
