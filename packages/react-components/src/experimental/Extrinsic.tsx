@@ -17,12 +17,10 @@ export default function Extrinsic ({
       <FieldExtrinsic
         // defaultValue={defaultValue}
         // isDisabled={isDisabled}
-        // isError={isError}
         // isPrivate={isPrivate}
         label={label}
         name='extrinsic'
         withLabel={withLabel}
-        // help={meta && meta.documentation && meta.documentation.join(' ')}
       />
       {/* <Params
         key={`${section}.${method}:params` // force re-render on change}

@@ -3,7 +3,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 import { useField } from 'formik';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import '../InputExtrinsic/InputExtrinsic.css';
 
@@ -28,7 +28,8 @@ export default function FieldExtrinsic ({
   withLabel,
   style
 }: Props): React.ReactElement<Props> {
-  const { api, apiDefaultTxSudo: { meta } } = useApi();
+  const { api, apiDefaultTxSudo: { meta, section, method } } = useApi();
+
   const sectionName = `${name}.section`;
   const [sectionField, sectionMeta] = useField(sectionName);
   const optionsSection = useMemo(() => createOptionsSection(api), [api]);
@@ -46,6 +47,14 @@ export default function FieldExtrinsic ({
     () => meta && meta.documentation && meta.documentation.join(' '),
     [meta]
   );
+
+  useEffect(() => {
+    onChangeSection(section);
+  }, [section]);
+
+  useEffect(() => {
+    onChangeMethod(method);
+  }, [method]);
 
   return (
     <div

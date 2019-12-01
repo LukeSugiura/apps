@@ -44,7 +44,6 @@ export default function Selection (): React.ReactElement {
             <Extrinsic
               // defaultValue={apiDefaultTxSudo}
               label={t('submit the following extrinsic')}
-              // onChange={this.onChangeExtrinsic}
               // onEnter={this.sendTx}
             />
           </form>
