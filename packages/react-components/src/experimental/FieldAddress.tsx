@@ -104,7 +104,7 @@ function FieldAddress ({
 
   const onChange = (value: string): void => {
     setLastValue(type, value);
-    field.onChange('accountId')(value);
+    field.onChange(name)(value);
   };
 
   // set stored address if exists

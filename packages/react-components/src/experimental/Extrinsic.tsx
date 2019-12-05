@@ -4,6 +4,8 @@
 
 import React from 'react';
 
+import FieldParams from '@polkadot/react-params/experimental';
+
 import FieldExtrinsic from './FieldExtrinsic';
 
 interface Props extends Pick<React.ComponentProps<typeof FieldExtrinsic>, 'label' | 'withLabel'> {
@@ -25,13 +27,13 @@ export default function Extrinsic ({
         name={name}
         withLabel={withLabel}
       />
-      {/* <Params
-        key={`${section}.${method}:params` // force re-render on change}
-        onChange={setValues}
-        onEnter={onEnter}
-        overrides={paramComponents}
-        params={params}
-      /> */}
+      <FieldParams
+        // key={`${section}.${method}:params` // force re-render on change}
+        // onChange={setValues}
+        // onEnter={onEnter}
+        // overrides={paramComponents}
+        // params={params}
+      />
     </div>
   );
 }

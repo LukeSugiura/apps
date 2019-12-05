@@ -13,18 +13,27 @@ import React, { useMemo } from 'react';
 import { Formik } from 'formik';
 
 import { FieldAddress, Extrinsic } from '@polkadot/react-components/experimental';
+import { RawParamValues } from '@polkadot/react-params/types';
 import { BalanceFree } from '@polkadot/react-query';
 
 import { useTranslation } from './translate';
 
 export default function Selection (): React.ReactElement {
   const { t } = useTranslation();
-  const initialValues = useMemo(() => ({
+  const initialValues: {
+    accountId: string;
+    extrinsic: {
+      section: string;
+      method: string;
+    };
+    params: RawParamValues;
+  } = useMemo(() => ({
     accountId: '',
     extrinsic: {
       section: '',
       method: ''
-    }
+    },
+    params: []
   }), []);
 
   return (
